@@ -38,7 +38,6 @@ dependencies:
   go_router: ^16.0.0
   json_serializable: ^6.9.5
   json_annotation: ^4.9.0
-  font_awesome_flutter: ^10.8.0
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
@@ -65,6 +64,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/image/
+#    - assets/sound/
 
 
   # The following line ensures that the Material Icons font is

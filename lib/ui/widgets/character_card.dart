@@ -11,15 +11,26 @@ class CharacterCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final greenDiamond = Color.fromARGB(255, 66, 244, 179);
+    final pinkDark = Color.fromARGB(255, 255, 56, 96);
+
+    final isNightMode = ref.watch(
+      characterProvider.select((state) => state.isNightMode),
+    );
+
+    // final AudioPlayer audioPlayer = AudioPlayer();
+
     return Card(
+      color: isNightMode
+          ? Color.fromARGB(255, 26, 36, 57)
+          : Color.fromARGB(255, 247, 242, 250),
       elevation: 10,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      shadowColor: Color.fromARGB(255, 66, 244, 179),
-      surfaceTintColor: Color.fromARGB(255, 66, 244, 179),
+      shadowColor: isNightMode ? pinkDark : greenDiamond,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          border: BoxBorder.all(color: Color.fromARGB(255, 66, 244, 179)),
+          border: BoxBorder.all(color: isNightMode ? pinkDark : greenDiamond),
         ),
         child: SizedBox(
           width: double.infinity,
@@ -30,15 +41,14 @@ class CharacterCard extends ConsumerWidget {
                   topLeft: Radius.circular(15),
                   bottomLeft: Radius.circular(15),
                 ),
-
                 child: Image.network(
                   character?.image ?? "",
                   width: 150,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
-                      'assets/image/rick_morty.png',
                       width: 140,
+                      'assets/image/rick_morty.png',
                     );
                   },
                 ),
@@ -54,7 +64,14 @@ class CharacterCard extends ConsumerWidget {
                           child: Text(
                             character?.name ?? '',
                             style: GoogleFonts.comicNeue(
-                              color: Color.fromARGB(255, 255, 56, 96),
+                              color: pinkDark,
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(1.5, 1.5),
+                                  blurRadius: 3.0,
+                                  color: greenDiamond,
+                                ),
+                              ],
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
@@ -65,20 +82,21 @@ class CharacterCard extends ConsumerWidget {
                             character?.isFavorite == true
                                 ? Icons.star
                                 : Icons.star_border,
-                            color: Color.fromARGB(255, 255, 56, 96),
+                            color: pinkDark,
                           ),
-                          onPressed: () => ref
-                              .read(characterProvider.notifier)
-                              .changeFavoritesCharacter(character),
+                          onPressed: () {
+                            ref
+                                .read(characterProvider.notifier)
+                                .changeFavoritesCharacter(character);
+                          }
                         ),
                       ],
                     ),
                     RichText(
                       text: TextSpan(
                         style: TextStyle(
-                          color: Colors.black,
+                          color: isNightMode ? pinkDark : Colors.black,
                           fontSize: 16,
-                          // fontWeight: FontWeight.bold,
                         ),
                         children: <TextSpan>[
                           TextSpan(text: 'Статус: '),
@@ -89,6 +107,8 @@ class CharacterCard extends ConsumerWidget {
                                   ? Color.fromARGB(255, 31, 202, 142)
                                   : character?.status == 'Dead'
                                   ? Color.fromARGB(255, 255, 56, 96)
+                                  : isNightMode
+                                  ? Colors.white
                                   : Color.fromARGB(255, 0, 0, 0),
                               fontWeight: FontWeight.bold,
                               fontStyle: FontStyle.italic,
@@ -102,7 +122,7 @@ class CharacterCard extends ConsumerWidget {
                       child: RichText(
                         text: TextSpan(
                           style: TextStyle(
-                            color: Colors.black,
+                            color: isNightMode ? pinkDark : Colors.black,
                             fontSize: 16,
                             // fontWeight: FontWeight.bold,
                           ),
@@ -110,7 +130,12 @@ class CharacterCard extends ConsumerWidget {
                             TextSpan(text: 'Расса: '),
                             TextSpan(
                               text: character?.species,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: isNightMode
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
                             ),
                           ],
                         ),
@@ -119,7 +144,7 @@ class CharacterCard extends ConsumerWidget {
                     RichText(
                       text: TextSpan(
                         style: TextStyle(
-                          color: Colors.black,
+                          color: isNightMode ? pinkDark : Colors.black,
                           fontSize: 16,
                           // fontWeight: FontWeight.bold,
                         ),
@@ -127,7 +152,10 @@ class CharacterCard extends ConsumerWidget {
                           TextSpan(text: 'Происхождение: '),
                           TextSpan(
                             text: character?.origin?.name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: isNightMode ? Colors.white : Colors.black,
+                            ),
                           ),
                         ],
                       ),

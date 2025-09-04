@@ -170,4 +170,6 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
       "Лист фаворитов при удалении ${state.favouriteRickAndMortyList}",
     );
   }
+
+
 }

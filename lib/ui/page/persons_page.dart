@@ -16,9 +16,17 @@ class CharactersCardScreen extends ConsumerWidget {
       characterProvider.select((state) => state.isLoadingMore),
     );
 
+    final isNightMode = ref.watch(
+      characterProvider.select((state) => state.isNightMode),
+    );
+
+    final greenDiamond = Color.fromARGB(255, 66, 244, 179);
+    final pinkDark = Color.fromARGB(255, 255, 56, 96);
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 240, 254, 249),
+      backgroundColor: isNightMode
+          ? Color.fromARGB(255, 10, 14, 23)
+          : Color.fromARGB(255, 240, 254, 249),
       body: characterList.when(
         error: (err, stack) => Center(child: Text('Ошибка: $err')),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -37,10 +45,43 @@ class CharactersCardScreen extends ConsumerWidget {
             },
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: EdgeInsets.symmetric(vertical: 30),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
+                    GestureDetector(
+                      onTap: () =>
+                          ref.read(characterProvider.notifier).changeMode(),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: BoxBorder.all(color: isNightMode ? greenDiamond : pinkDark),
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                isNightMode ? Icons.nights_stay : Icons.sunny,
+                                color: isNightMode ? greenDiamond : pinkDark,
+                              ),
+                              SizedBox(width: 7),
+                              Text(
+                                isNightMode ? 'Тёмная тема' : 'Светлая тема',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                  color: isNightMode ? greenDiamond : pinkDark,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
