@@ -13,7 +13,7 @@ class FavoritesScreen extends ConsumerWidget {
     );
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 240, 254, 249),
-      body: Padding(
+      body: SingleChildScrollView(child: Padding(
         padding: EdgeInsets.symmetric(vertical: 20),
         child: characterList?.isEmpty ?? true
             ? Center(child: Text('Нет персонажей в избранном', style: TextStyle(fontSize: 20),))
@@ -30,6 +30,6 @@ class FavoritesScreen extends ConsumerWidget {
                     CharacterCard(character: characterList?[index]),
               ),
       ),
-    );
+    ),);
   }
 }
