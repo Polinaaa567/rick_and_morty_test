@@ -30,9 +30,11 @@
 
 
 Страница с персонажами:
+
 <img width="195" height="420" alt="image" src="https://github.com/user-attachments/assets/bdf9dc09-4a66-4f05-a57c-b310be964b16" />
 <img width="195" height="420" alt="image" src="https://github.com/user-attachments/assets/37c3a68e-c39e-4fe9-866c-1391354f15a4" />
 <img width="195" height="420" alt="image" src="https://github.com/user-attachments/assets/916d9d7b-91b0-4ba4-bed1-bc85856aea87" />
 
 Страница избранного:
+
 <img width="195" height="420" alt="image" src="https://github.com/user-attachments/assets/a3820cde-1890-4d2f-b843-ec0c7984421a" />
