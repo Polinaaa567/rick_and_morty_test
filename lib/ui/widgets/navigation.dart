@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:go_router/go_router.dart';
 
-import 'package:untitled1/core/providers/navigation_provider.dart';
+import 'package:rick_and_morty/core/providers/navigation_provider.dart';
 
 class NavigationMenu extends ConsumerWidget {
   const NavigationMenu({super.key});

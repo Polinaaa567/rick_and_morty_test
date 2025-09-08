@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:untitled1/core/models/results/results.dart';
-import 'package:untitled1/core/providers/character_provider.dart';
+
+import 'package:rick_and_morty/core/models/results/results.dart';
+import 'package:rick_and_morty/core/providers/character_provider.dart';
 
 class CharacterCard extends ConsumerWidget {
   final Results? character;
@@ -17,8 +21,6 @@ class CharacterCard extends ConsumerWidget {
     final isNightMode = ref.watch(
       characterProvider.select((state) => state.isNightMode),
     );
-
-    // final AudioPlayer audioPlayer = AudioPlayer();
 
     return Card(
       color: isNightMode
@@ -41,18 +43,43 @@ class CharacterCard extends ConsumerWidget {
                   topLeft: Radius.circular(15),
                   bottomLeft: Radius.circular(15),
                 ),
-                child: Image.network(
-                  character?.image ?? "",
-                  width: 150,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      width: 140,
-                      'assets/image/rick_morty.png',
-                    );
+                child: FutureBuilder<File>(
+                  future: DefaultCacheManager().getSingleFile(character?.image ?? ""),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Image.file(
+                        snapshot.data!,
+                        width: 130,
+                        fit: BoxFit.cover,
+                      );
+                    } else if (snapshot.hasError) {
+                      return Image.asset(
+                        'assets/image/rick_morty.png',
+                        width: 130,
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
                   },
                 ),
               ),
+              // ClipRRect(
+              //   borderRadius: BorderRadius.only(
+              //     topLeft: Radius.circular(15),
+              //     bottomLeft: Radius.circular(15),
+              //   ),
+              //   child: Image.network(
+              //     character?.image ?? "",
+              //     width: 150,
+              //     fit: BoxFit.cover,
+              //     errorBuilder: (context, error, stackTrace) {
+              //       return Image.asset(
+              //         width: 140,
+              //         'assets/image/rick_morty.png',
+              //       );
+              //     },
+              //   ),
+              // ),
               SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -67,7 +94,7 @@ class CharacterCard extends ConsumerWidget {
                               color: pinkDark,
                               shadows: [
                                 Shadow(
-                                  offset: Offset(1.5, 1.5),
+                                  offset: Offset(0.75, 0.75),
                                   blurRadius: 3.0,
                                   color: greenDiamond,
                                 ),
@@ -88,7 +115,7 @@ class CharacterCard extends ConsumerWidget {
                             ref
                                 .read(characterProvider.notifier)
                                 .changeFavoritesCharacter(character);
-                          }
+                          },
                         ),
                       ],
                     ),
@@ -104,9 +131,9 @@ class CharacterCard extends ConsumerWidget {
                             text: character?.status,
                             style: TextStyle(
                               color: character?.status == 'Alive'
-                                  ? Color.fromARGB(255, 31, 202, 142)
+                                  ? greenDiamond
                                   : character?.status == 'Dead'
-                                  ? Color.fromARGB(255, 255, 56, 96)
+                                  ? pinkDark
                                   : isNightMode
                                   ? Colors.white
                                   : Color.fromARGB(255, 0, 0, 0),
@@ -149,7 +176,7 @@ class CharacterCard extends ConsumerWidget {
                           // fontWeight: FontWeight.bold,
                         ),
                         children: <TextSpan>[
-                          TextSpan(text: 'Происхождение: '),
+                          TextSpan(text: 'Начало: '),
                           TextSpan(
                             text: character?.origin?.name,
                             style: TextStyle(

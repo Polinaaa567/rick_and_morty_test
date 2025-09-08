@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:untitled1/core/providers/character_provider.dart';
-import 'package:untitled1/ui/widgets/character_card.dart';
+
+import 'package:rick_and_morty/core/models/character/character.dart';
+import 'package:rick_and_morty/core/providers/cache_provider.dart';
+import 'package:rick_and_morty/core/providers/character_provider.dart';
+import 'package:rick_and_morty/ui/widgets/character_card.dart';
 
 class CharactersCardScreen extends ConsumerWidget {
   const CharactersCardScreen({super.key});
@@ -28,15 +31,36 @@ class CharactersCardScreen extends ConsumerWidget {
           ? Color.fromARGB(255, 10, 14, 23)
           : Color.fromARGB(255, 240, 254, 249),
       body: characterList.when(
-        error: (err, stack) => Center(child: Text('Ошибка: $err')),
+        error: (err, stack) {
+          final currentPage = ref.watch(characterProvider.select((state) => state.page));
+          final cachedData = ref.read(cacheServiceProvider).getCharacters(currentPage);
+
+          return FutureBuilder<Character?>(
+            future: cachedData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final result = snapshot.data!.results ?? [];
+                return ListView.separated(
+                  itemCount: result.length,
+                  itemBuilder: (context, index) =>
+                      CharacterCard(character: result[index]),
+                  separatorBuilder: (context, index) => SizedBox(height: 17),
+                );
+              } else {
+                return Center(
+                  child: Text('Ошибка: $err\nНет кэшированных данных'),
+                );
+              }
+            },
+          );
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         data: (list) {
           final result = list.results ?? [];
 
           return NotificationListener<ScrollNotification>(
             onNotification: (scrollInfo) {
-              if (scrollInfo.metrics.pixels >=
-                  scrollInfo.metrics.maxScrollExtent * 0.95) {
+              if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent * 0.95) {
                 if (!isLoading) {
                   ref.read(characterProvider.notifier).fetchAllCharacters();
                 }
@@ -50,14 +74,15 @@ class CharactersCardScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: () =>
-                          ref.read(characterProvider.notifier).changeMode(),
+                      onTap: () => ref.read(characterProvider.notifier).changeMode(),
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            border: BoxBorder.all(color: isNightMode ? greenDiamond : pinkDark),
+                            border: BoxBorder.all(
+                              color: isNightMode ? greenDiamond : pinkDark,
+                            ),
                           ),
                           padding: EdgeInsets.all(10),
                           child: Row(
@@ -89,11 +114,9 @@ class CharactersCardScreen extends ConsumerWidget {
                         horizontal: 10,
                         vertical: 8,
                       ),
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 17),
+                      separatorBuilder: (context, index) => SizedBox(height: 17),
                       itemCount: result.length,
-                      itemBuilder: (context, index) =>
-                          CharacterCard(character: result[index]),
+                      itemBuilder: (context, index) => CharacterCard(character: result[index]),
                     ),
                   ],
                 ),

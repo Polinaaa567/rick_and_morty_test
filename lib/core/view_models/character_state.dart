@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:untitled1/core/models/character/character.dart';
-import 'package:untitled1/core/models/results/results.dart';
+import 'package:rick_and_morty/core/models/character/character.dart';
+import 'package:rick_and_morty/core/models/results/results.dart';
 
 class CharacterState {
   final AsyncValue<Character> characterList;

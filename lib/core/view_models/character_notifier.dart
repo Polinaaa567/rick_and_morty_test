@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:untitled1/core/models/results/results.dart';
-import 'package:untitled1/core/repositories/character_repository.dart';
-import 'package:untitled1/core/view_models/character_state.dart';
-
 import 'package:logger/logger.dart';
+
+import 'package:rick_and_morty/core/models/results/results.dart';
+import 'package:rick_and_morty/core/repositories/character_repository.dart';
+import 'package:rick_and_morty/core/view_models/character_state.dart';
 
 class CharacterNotifier extends StateNotifier<CharacterState> {
   final ICharacterRepository repository;
@@ -18,23 +14,15 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
   }
 
   Future<void> _loadFavourite() async {
-    final prefs = await SharedPreferences.getInstance();
-    final favouriteListJson = prefs.getString('favourite');
-
-    if (favouriteListJson != null) {
-      try {
-        final List<dynamic> jsonList = jsonDecode(favouriteListJson);
-
-        final List<Results> favouriteList = jsonList
-            .map((json) => Results.fromJson(json as Map<String, dynamic>))
-            .toList();
-
-        state = state.copyWith(favouriteRickAndMortyList: favouriteList);
-      } catch (e) {
-        Logger().d('Ошибка при парсинге: $e');
-        final List<Results> favouriteList = [];
-        state = state.copyWith(favouriteRickAndMortyList: favouriteList);
-      }
+    try {
+      final favorites = await repository.getFavorites();
+      state = state.copyWith(favouriteRickAndMortyList: favorites);
+    } catch (e) {
+      Logger().e('Ошибка при загрузке избранного: $e');
+      state = state.copyWith(
+        favouriteRickAndMortyList: [],
+        error: 'Не удалось загрузить избранное',
+      );
     }
   }
 
@@ -88,8 +76,6 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
 
   Future<void> changeFavoritesCharacter(Results? character) async {
     if (character == null) return;
-
-    final prefs = await SharedPreferences.getInstance();
 
     if (character.isFavorite) {
       final List<Results> favoritesList = [
@@ -153,23 +139,10 @@ class CharacterNotifier extends StateNotifier<CharacterState> {
       );
     }
 
-    final favouriteListJson = jsonEncode(
-      state.favouriteRickAndMortyList?.map((e) => e.toJson()).toList(),
-    );
-    prefs.setString('favourite', favouriteListJson);
+    await repository.saveToFavorites(state.favouriteRickAndMortyList);
 
     Logger().d(
       "Лист фаворитов при добавлении ${state.favouriteRickAndMortyList}",
     );
   }
-
-  void removeFavoritesCharacter(Results? character) {
-    if (character == null) return;
-
-    Logger().d(
-      "Лист фаворитов при удалении ${state.favouriteRickAndMortyList}",
-    );
-  }
-
-
 }

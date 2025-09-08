@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:untitled1/core/providers/character_provider.dart';
-import 'package:untitled1/ui/widgets/character_card.dart';
+import 'package:rick_and_morty/core/providers/character_provider.dart';
+import 'package:rick_and_morty/ui/widgets/character_card.dart';
 
 class FavoritesScreen extends ConsumerWidget {
   const FavoritesScreen({super.key});

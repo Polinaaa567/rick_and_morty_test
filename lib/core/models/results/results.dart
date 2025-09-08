@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:untitled1/core/models/location/location.dart';
-import 'package:untitled1/core/models/origin/origin.dart';
+import 'package:rick_and_morty/core/models/location/location.dart';
+import 'package:rick_and_morty/core/models/origin/origin.dart';
 
 part 'results.g.dart';
 part 'results.freezed.dart';

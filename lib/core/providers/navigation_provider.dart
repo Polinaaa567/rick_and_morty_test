@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:untitled1/ui/navigation.dart';
-import 'package:untitled1/ui/page/favorites_page.dart';
-import 'package:untitled1/ui/page/persons_page.dart';
+import 'package:rick_and_morty/ui/widgets/navigation.dart';
+import 'package:rick_and_morty/ui/page/favorites_page.dart';
+import 'package:rick_and_morty/ui/page/persons_page.dart';
 
 final navIndexProvider = StateProvider<int>((ref) => 0);
 
@@ -15,17 +15,15 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     routes: [
       ShellRoute(
-        builder: (context, state, child) {
-          return Scaffold(
-              body: child,
-              bottomNavigationBar: NavigationMenu()
-          );
-        },
+        builder: (context, state, child) => Scaffold(
+            body: child,
+            bottomNavigationBar: NavigationMenu(),
+        ),
         routes: [
           GoRoute(
             path: '/',
             pageBuilder: (context, state) => CustomTransitionPage(
-              child:  CharactersCardScreen(),
+              child: CharactersCardScreen(),
               transitionsBuilder: (_, animation, __, child) =>
                   FadeTransition(opacity: animation, child: child),
             ),
@@ -43,11 +41,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
     redirect: (context, state) {
       final location = state.path;
-      if (location == '/' || location == '/character') {
+      if (location == '/' || location == '/character')
         navIndexNotifier.state = 0;
-      } else if (location == '/favourites') {
+      else if (location == '/favourites')
         navIndexNotifier.state = 1;
-      }
 
       return null;
     },
