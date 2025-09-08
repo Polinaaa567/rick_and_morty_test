@@ -1,16 +1,41 @@
-# untitled1
+<h1 align="center">Тестовое задание: "Список персонажей Рика и Морти"</h1>
 
-A new Flutter project.
+<h2 align="center">Описание</h2>
+Необходимо разработать мобильное приложение на Flutter, которое загружает список персонажей мультсериала "Рик и Морти" с публичного API. Приложение должно позволять добавлять персонажей в избранное и обеспечивать оффлайн-доступ к данным.
 
-## Getting Started
+Ссылка на документацию API: https://rickandmortyapi.com/documentation/
 
-This project is a starting point for a Flutter application.
+<h2 align="center">Особенности</h2>
+В качестве state management используется Riverpod. API запросы принимаются через REST с помощью библиотеки http. Хранение данных с помощью SharedPreferences. 
 
-A few resources to get you started if this is your first Flutter project:
+<h2 align="center">Основные возможности</h2>
+1. Главный экран (Список персонажей)
+•	Отображает список персонажей в виде карточек.
+•	Карточка персонажа содержит:
+•	Изображение персонажа.
+•	Имя персонажа.
+•	Дополнительные характеристики (на выбор разработчика, например, статус, вид, локация и т. д.).
+•	Кнопка "звездочка" (IconButton) для добавления в избранное (заполненная — в избранном, пустая — не в избранном).
+2. Экран "Избранное"
+   •	Отображает список избранных персонажей.
+   •	Такие же карточки, как на главном экране.
+   •	Сортировка (по имени, по статусу или по другому параметру – на выбор разработчика).
+   •	Возможность удаления персонажа из избранного.
+3. Навигация
+   •	Навбар (BottomNavigationBar) для переключения между экранами.
+4. Дополнительно
+   •	Пагинация: подгрузка новых персонажей на главном экране при скролле.
+   •	Кеширование: загруженные данные должны сохраняться локально, чтобы приложение работало без интернета.
+   •	Фавориты должны сохраняться в базе данных (например, SQLite, Drift, Hive, Isar, SharedPreferences).
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Страница с персонажами:
+<img width="195" height="420" alt="Снимок экрана 2025-09-03 123854" src="https://github.com/user-attachments/assets/da61686d-f935-438b-b932-818912a774aa" />
+<img width="195" height="420" alt="Снимок экрана 2025-09-03 124305" src="https://github.com/user-attachments/assets/b5b08cbe-66ff-4818-9d8e-0a9ba4737d2c" />
+<img width="195" height="420" alt="Снимок экрана 2025-09-03 124348" src="https://github.com/user-attachments/assets/e71bc425-1fb5-4056-9d57-8ec86f6affdb" />
+<img width="195" height="420" alt="Снимок экрана 2025-09-03 125251" src="https://github.com/user-attachments/assets/022d3b14-aa30-4ad7-a3ce-3fed6dc5c116" />
+
+Страница избранного:
+<img width="195" height="420" alt="Снимок экрана 2025-09-03 124417" src="https://github.com/user-attachments/assets/dee412a9-acdb-49dc-8dcb-ff623b3cb71d" />
+<img width="195" height="420" alt="Снимок экрана 2025-09-03 124430" src="https://github.com/user-attachments/assets/9aab99e7-04e2-455d-ac16-27a86374a948" />
+<img width="195" height="420" alt="Снимок экрана 2025-09-03 124453" src="https://github.com/user-attachments/assets/2cd341b0-f057-43a0-b6c1-15b86c7201b6" />
