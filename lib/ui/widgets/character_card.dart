@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,11 +48,19 @@ class CharacterCard extends ConsumerWidget {
                   future: DefaultCacheManager().getSingleFile(character?.image ?? ""),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Image.file(
-                        snapshot.data!,
-                        width: 130,
-                        fit: BoxFit.cover,
-                      );
+                      if (kIsWeb) {
+                        return Image.network(
+                          character?.image ?? "",
+                          width: 170,
+                          fit: BoxFit.cover,
+                        );
+                      } else {
+                        return Image.file(
+                          snapshot.data!,
+                          width: 130,
+                          fit: BoxFit.cover,
+                        );
+                      }
                     } else if (snapshot.hasError) {
                       return Image.asset(
                         'assets/image/rick_morty.png',
@@ -173,7 +182,6 @@ class CharacterCard extends ConsumerWidget {
                         style: TextStyle(
                           color: isNightMode ? pinkDark : Colors.black,
                           fontSize: 16,
-                          // fontWeight: FontWeight.bold,
                         ),
                         children: <TextSpan>[
                           TextSpan(text: 'Начало: '),

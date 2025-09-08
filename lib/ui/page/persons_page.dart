@@ -32,8 +32,12 @@ class CharactersCardScreen extends ConsumerWidget {
           : Color.fromARGB(255, 240, 254, 249),
       body: characterList.when(
         error: (err, stack) {
-          final currentPage = ref.watch(characterProvider.select((state) => state.page));
-          final cachedData = ref.read(cacheServiceProvider).getCharacters(currentPage);
+          final currentPage = ref.watch(
+            characterProvider.select((state) => state.page),
+          );
+          final cachedData = ref
+              .read(cacheServiceProvider)
+              .getCharacters(currentPage);
 
           return FutureBuilder<Character?>(
             future: cachedData,
@@ -60,7 +64,8 @@ class CharactersCardScreen extends ConsumerWidget {
 
           return NotificationListener<ScrollNotification>(
             onNotification: (scrollInfo) {
-              if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent * 0.95) {
+              if (scrollInfo.metrics.pixels >=
+                  scrollInfo.metrics.maxScrollExtent * 0.95) {
                 if (!isLoading) {
                   ref.read(characterProvider.notifier).fetchAllCharacters();
                 }
@@ -74,7 +79,8 @@ class CharactersCardScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: () => ref.read(characterProvider.notifier).changeMode(),
+                      onTap: () =>
+                          ref.read(characterProvider.notifier).changeMode(),
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Container(
@@ -114,9 +120,11 @@ class CharactersCardScreen extends ConsumerWidget {
                         horizontal: 10,
                         vertical: 8,
                       ),
-                      separatorBuilder: (context, index) => SizedBox(height: 17),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 17),
                       itemCount: result.length,
-                      itemBuilder: (context, index) => CharacterCard(character: result[index]),
+                      itemBuilder: (context, index) =>
+                          CharacterCard(character: result[index]),
                     ),
                   ],
                 ),
